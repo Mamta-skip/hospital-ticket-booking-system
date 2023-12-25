@@ -1,9 +1,12 @@
 import React from 'react'
+import Firstrow from './HomeComponents/Firstrow'
+import SecondrowFeature from './HomeComponents/SecondrowFeature'
 
 function About() {
   return (
     <div>
-      <h1>this is home components.</h1>
+      <Firstrow/>
+      <SecondrowFeature />
     </div>
   )
 }
