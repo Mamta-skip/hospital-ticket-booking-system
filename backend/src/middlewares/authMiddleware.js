@@ -1,35 +1,20 @@
-import jwt from "jsonwebtoken"
-import User from "../models/userModels.js"
 
- const verifyJwt =  async(req,res,next)=>{
-    try{
-        const  token = req.cookies?.accessToken || req.header("Authorization")?.replace("Bearer " ,"");
+import jwt from 'jsonwebtoken';
 
-    if(!token){
-        res.status(401).json({message:"Unauthorized request"});
 
+const authMiddleware = async (req, res, next) => {
+    const auhHeader = req.headers.authorization;
+    const token = auhHeader && auhHeader.split(' ')[1];
+    console.log(token);
+
+    if (!token) {
+        return res.status(401).json({ error: 'Token not found' });
     }
+    console.log("auth");
 
-     const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET)
-
-     const user = await User.findById(decoded?._id).select("-password -accessToken");
-
-     if(!user){
-        res.status(401).json({
-            message : " Invalid AccessToken "
-        })
-     }
-     req.user = user;
-     next()
-    }
-
-
-catch(error){
-res.status(401).json({
-    message:error.message
-})
-}
+    const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
+    req.user = decoded;
+    next()
 }
 
-
-export {verifyJwt}
+export default authMiddleware;
