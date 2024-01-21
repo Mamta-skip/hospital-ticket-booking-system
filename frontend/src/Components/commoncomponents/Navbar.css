@@ -1,0 +1,11 @@
+.Navitems{
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: #92f004;
+    
+
+}
+.Navitems :hover{
+    border-bottom: 3px solid #84cc16;
+}
