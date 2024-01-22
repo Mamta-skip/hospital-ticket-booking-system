@@ -3,8 +3,10 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import Home from './Components/Home'; // Import your Home component
-import About from './Components/About'; // Import your About component
+
 import Navbars from './Components/commoncomponents/Navbar';
+import Register from './Components/Register/Register';
+import Login from './Components/Login/Login';
 
 
 const App = () => {
@@ -14,7 +16,8 @@ const App = () => {
       <Navbars />
       <Routes>
       <Route exact path="/" element={<Home/>}></Route>
-<Route path="/about" element={<About/>}></Route>
+<Route path="/register" element={<Register/>}></Route>
+<Route path="/login" element={<Login/>}></Route>
 </Routes>
 
     </Router>

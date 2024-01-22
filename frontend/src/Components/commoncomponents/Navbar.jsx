@@ -23,10 +23,10 @@ function Navbars() {
             </NavLink>
           </Nav>
           <Nav>
-            <NavLink className="nav-link Navitems" to="/blog">
+            <NavLink className="nav-link Navitems" to="/login">
               Login
             </NavLink>
-            <NavLink className="nav-link Navitems" to="/contact" >
+            <NavLink className="nav-link Navitems" to="/register" >
               Signup
             </NavLink>
           </Nav>
