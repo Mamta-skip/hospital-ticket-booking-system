@@ -74,5 +74,61 @@ const loginUser = async (req, res) => {
 
 
 
+const getUserDetails = async (req, res) => {
+  try {
+    const user = await User.find({});
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(400).json({ error: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
-export{registerUser,loginUser};
+// const getUserById = async (req, res) => {
+//     try {
+//         const user = await User.findById(req.params.id).select('-password');
+//         if (user) {
+//         res.status(200).json(user);
+//         } else {
+//         res.status(400).json({ error: 'User not found' });
+//         }
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+//     }
+
+// const deleteUserById= async(req, res)=>{
+//   try {
+//     const user = await User.findById(req.params.id);
+//     if(user){
+//       await user.remove();
+//       res.status(200).json({message: 'User removed successfully'});
+//     }
+//     else
+//     {
+//       res.status(400).json({error: 'User not found'});
+//     }
+
+//   }
+//   catch (error) {
+//     res.status(500).json({ error: error.message });
+// }
+// };
+
+// const logoutUser = (req, res) => {
+//   try {
+//     // Clear the JWT token from the client-side (local storage)
+//     localStorage.removeItem("token");
+//     res.status(200).json({ message: "User logged out successfully" });
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
+export { registerUser, loginUser,getUserDetails};
+
+ 

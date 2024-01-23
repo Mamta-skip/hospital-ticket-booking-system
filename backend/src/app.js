@@ -11,7 +11,6 @@ const app = express()
 
 import userRoutes from './routes/userRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
-import adminRoutes from './routes/adminRoutes.js';
 
 
 
@@ -23,18 +22,12 @@ app.use(cookieParser())
  
 
 //using the cors
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  if (req.method === 'OPTIONS') {
-    res.sendStatus(200); // Respond to OPTIONS requests with a 200 status
-  } else {
-    next();
-  }
-});
-
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN,
+    credentials: true,
+  })
+);
 
 
 database(); 
