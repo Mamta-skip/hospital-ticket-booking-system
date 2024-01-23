@@ -23,12 +23,18 @@ app.use(cookieParser())
  
 
 //using the cors
-app.use(
-    cors({
-      origin: process.env.CORS_ORIGIN,
-      credentials: true,
-    })
-  );
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.header('Access-Control-Allow-Headers', 'Content-Type');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  if (req.method === 'OPTIONS') {
+    res.sendStatus(200); // Respond to OPTIONS requests with a 200 status
+  } else {
+    next();
+  }
+});
+
 
 
 database(); 
@@ -36,8 +42,6 @@ database();
 
 app.use("/api/v1/users",userRoutes);
 app.use("/api/v1/tickets",ticketRoutes);
-app.use("/api/v1/admin",adminRoutes);
-
 
   const PORT = process.env.PORT || 3000;
 
