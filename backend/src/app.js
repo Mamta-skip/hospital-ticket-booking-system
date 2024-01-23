@@ -10,6 +10,8 @@ const app = express()
 //importing the routes
 
 import userRoutes from './routes/userRoutes.js';
+import ticketRoutes from './routes/ticketRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 
 
 
@@ -33,6 +35,9 @@ database();
 //using the routes
 
 app.use("/api/v1/users",userRoutes);
+app.use("/api/v1/tickets",ticketRoutes);
+app.use("/api/v1/admin",adminRoutes);
+
 
   const PORT = process.env.PORT || 3000;
 

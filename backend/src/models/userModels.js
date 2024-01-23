@@ -1,8 +1,9 @@
 import mongoose from "mongoose";
 
+
 const userSchema = mongoose.Schema(
     {
-        name:{
+        username:{
             type:String,
             required:true
         },
@@ -14,6 +15,12 @@ const userSchema = mongoose.Schema(
         password:{
             type:String,
             required:[true, "Please enter a password"],
+        },
+        
+        roles:{
+            type:String,
+            enum:['ADMIN','CLIENT'],
+            default:'CLIENT'
         },
         
     },
