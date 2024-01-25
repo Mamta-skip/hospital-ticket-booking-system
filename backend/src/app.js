@@ -34,6 +34,7 @@ app.use(
 database(); 
 //using the routes
 
+
 app.use("/api/v1/users",userRoutes);
 app.use("/api/v1/tickets",ticketRoutes);
 
