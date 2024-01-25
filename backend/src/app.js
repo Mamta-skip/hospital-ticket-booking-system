@@ -15,6 +15,7 @@ import ticketRoutes from './routes/ticketRoutes.js';
 
 
 
+
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -35,6 +36,7 @@ database();
 
 app.use("/api/v1/users",userRoutes);
 app.use("/api/v1/tickets",ticketRoutes);
+
 
   const PORT = process.env.PORT || 3000;
 
