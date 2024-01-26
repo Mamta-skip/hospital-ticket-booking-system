@@ -5,28 +5,26 @@ import './Navbar.css'
 
 function Navbars() {
   return (
-    <Navbar collapseOnSelect expand="lg" className="bg-body-tertiary">
+    <Navbar collapseOnSelect expand="lg" className="Navitems">
       <Container>
-        <Navbar.Brand href="#home">ABC Hospital</Navbar.Brand>
+        <Navbar.Brand href="#home" style={{color:'#a50e58', fontWeight:'bolder', fontSize:'30px',textTransform:'none'}}>ABC</Navbar.Brand>
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
-          <Nav className="me-auto">
+          <Nav className="me-auto" >
             
-            <NavLink className="nav-link Navitems" to="/">
+            <NavLink className="nav-link item" style={{color:'#84cc16', fontWeight:'bold'}} to="/">
               Home
             </NavLink>
-            <NavLink className="nav-link Navitems" to="/location" >
-              Location
-            </NavLink>
-            <NavLink className="nav-link Navitems" to="/book" >
+           
+            <NavLink className="nav-link " to="/book"style={{color:'#84cc16', fontWeight:'bold'}} >
               Book Ticket
             </NavLink>
           </Nav>
           <Nav>
-            <NavLink className="nav-link Navitems" to="/login">
+            <NavLink className="nav-link " to="/login" style={{color:'#84cc16', fontWeight:'bold'}}>
               Login
             </NavLink>
-            <NavLink className="nav-link Navitems" to="/register" >
+            <NavLink className="nav-link " to="/register" style={{color:'#84cc16', fontWeight:'bold'}}>
               Signup
             </NavLink>
           </Nav>

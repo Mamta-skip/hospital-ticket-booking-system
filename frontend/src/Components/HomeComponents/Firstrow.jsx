@@ -13,7 +13,7 @@ function Firstrow() {
           <Col md={6}>
             <Card border='light' style={{ height: '100%' }}>
               <Card.Body className="d-flex flex-column justify-content-center align-items-center">
-                <Card.Title style={{ fontSize: '1.9rem',textTransform:'uppercase', color:'skyblue',fontWeight: 'bold', marginBottom: '1rem' }}>
+                <Card.Title style={{ fontSize: '1.9rem',textTransform:'uppercase', color:'#349122',fontWeight: 'bold', marginBottom: '1rem' }}>
                   Your Health is your priority
                 </Card.Title>
                 <Card.Text style={{ fontSize: '1.2rem', textAlign: 'center', lineHeight: '2rem', color: '#555' }}>
@@ -21,7 +21,7 @@ function Firstrow() {
                   bulk of the card's content text to build on the card title and make up the
                   bulk of the card's content.
                 </Card.Text>
-                <Button variant="success" style={{ fontSize: '1.5rem', padding: '12px 24px', marginTop: '1rem' }}>
+                <Button style={{ fontSize: '1.5rem',color:'#fff',background:'#349122', border:'none', padding: '12px 15px', marginTop: '1rem' }}>
                   Book Ticket
                 </Button>{' '}
               </Card.Body>

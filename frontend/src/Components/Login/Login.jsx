@@ -1,88 +1,81 @@
+// src/components/Login.js
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
-const Login = () => {
+
+
+
+const Login = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-
-    // Assuming you have a login function that communicates with your backend
-    // This is where you can make a POST request to your login endpoint
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const handleLogin = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          credentials: 'include',
-        },
-        body: JSON.stringify({ email, password }),
+      const response = await axios.post('http://localhost:3000/api/v1/users/login', {
+        email,
+        password,
       });
 
-      if (response.ok) {
-        // Login successful, you might want to redirect or perform other actions
-        console.log('Login successful!');
-        // Redirect or perform other actions as needed
-      } else {
-        // Login failed, handle errors
-        console.error('Login failed:', response.statusText);
-        // Handle error, display error message, etc.
-      }
+    
+      console.log('Login successful:', response.data);
+      localStorage.setItem('user',response.data.username);
+
+      navigate("/");
     } catch (error) {
-      console.error('Login error:', error.message);
-      // Handle error, display error message, etc.
+     
+      console.error('Error during login:', error.message);
+      setError('Invalid username or password');
     }
   };
 
   return (
-    <Container>
-      <Row className="justify-content-md-center mt-5">
-        <Col md={6}>
-          <h2>Login</h2>
-          <Form onSubmit={handleLogin}>
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email address</Form.Label>
+    <div>
+    <Container className="login-container mb-4  align-item-center">
+      <Row className="justify-content-center ">
+        <Col xs={12} md={8} lg={6} className="login-form-container logincontainer">
+          <div className="mb-2 text-align-center">
+            <h3 className="font-light text-3xl text-gray-800 mt-4 mb-4">Login</h3>
+          </div>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form>
+            <Form.Group controlId="formUsername">
+              <Form.Label>Your Email</Form.Label>
               <Form.Control
                 type="email"
-                placeholder="Enter email"
+                placeholder="Your Email"
                 value={email}
-                onChange={handleEmailChange}
-                required
+                onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
-
             <Form.Group controlId="formPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control
                 type="password"
-                placeholder="Enter password"
+                placeholder="Your Password"
                 value={password}
-                onChange={handlePasswordChange}
-                required
+                onChange={(e) => setPassword(e.target.value)}
               />
             </Form.Group>
-
-            <Button variant="primary" type="submit">
+            <Button variant="primary" onClick={handleLogin} className="login-button">
               Login
             </Button>
-
-            <p className="mt-3">
-              Don't have an account? <Link to="/register">Register here</Link>.
-            </p>
+            <div className="mt-3">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+            <div className="mt-3">
+              Don't have an account? <Link to="/register">Register</Link>
+            </div>
           </Form>
         </Col>
       </Row>
     </Container>
+    
+    </div>
   );
 };
 

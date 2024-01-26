@@ -1,110 +1,91 @@
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Form, Button, Container } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-      case 'email':
-        setEmail(value);
-        break;
-      case 'password':
-        setPassword(value);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleRegister = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/users/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ name, email, password }),
-        credentials: 'include',
+      if (password !== confirmPassword) {
+        console.error('Password and confirm password do not match');
+        return;
+      }
 
+      const response = await axios.post('http://localhost:3000/api/v1/users/register', {
+        username: name,
+        email,
+        password,
+        confirmPassword,
       });
 
-      if (response.ok) {
-        // Registration successful, you might want to redirect or perform other actions
-        console.log('Registration successful!');
-        // Redirect or perform other actions as needed
-      } else {
-        // Registration failed, handle errors
-        console.error('Registration failed:', response.statusText);
-        // Handle error, display error message, etc.
-      }
+      console.log('Registration successful:', response.data);
+      navigate('/login');
     } catch (error) {
-      console.error('Registration error:', error.message);
-      // Handle error, display error message, etc.
+      if (error.response) {
+        console.error('Server responded with an error:', error.response.data);
+        console.error('Status code:', error.response.status);
+      } else if (error.request) {
+        console.error('No response received from the server');
+      } else {
+        console.error('Error setting up the request:', error.message);
+      }
     }
   };
 
   return (
-    <Container>
-      <Row className="justify-content-md-center mt-5">
-        <Col md={6}>
-          <h2>Register</h2>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formName">
-              <Form.Label>Name</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter your name"
-                name="name"
-                value={name}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control
-                type="email"
-                placeholder="Enter email"
-                name="email"
-                value={email}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group controlId="formPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Enter password"
-                name="password"
-                value={password}
-                onChange={handleChange}
-                required
-              />
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
+    <Container className="register-container">
+      <div className="register-form-controller">
+        <h3>Register</h3>
+        <Form>
+          <Form.Group controlId="formName">
+            <Form.Label>Your Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Your Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Ex. james@bond.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formConfirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </Form.Group>
+          <div className="d-flex flex-column align-items-center justify-content-center mt-4">
+            <Button variant="primary" onClick={handleRegister} className="register-button" as={NavLink} to="/login">
               Register
             </Button>
-          </Form>
-
-          <p className="mt-3">
-            Already have an account?{' '}
-            <Link to="/login">Login as user</Link>
-          </p>
-        </Col>
-      </Row>
+          </div>
+        </Form>
+      </div>
     </Container>
   );
 };
