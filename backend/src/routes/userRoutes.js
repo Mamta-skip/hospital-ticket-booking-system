@@ -1,4 +1,4 @@
-import {registerUser, loginUser} from "../controllers/userControllers.js";
+import {registerUser, loginUser,getUserDetails} from "../controllers/userControllers.js";
 import authMiddleware from '../middlewares/authMiddleware.js'
 import isAdmin from "../middlewares/adminMiddleware.js";
 
@@ -10,7 +10,10 @@ router.post("/register",registerUser);
 router.post("/login",loginUser);
 
 
-//router.post("/logout",authMiddleware,logoutUser)
+
+// Routes that require authentication and admin role
+router.get("/", authMiddleware, isAdmin, getUserDetails);
+
 
 
 export default router;
