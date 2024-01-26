@@ -1,56 +1,82 @@
+// src/components/Login.js
 import React, { useState } from 'react';
-import axios from 'axios';
+import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-// import { useHistory } from 'react-router-dom';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import './Login.css';
 
 
-const LoginForm = () => {
+
+
+const Login = ({ history }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const history = useHistory();
-
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      const response = await axios.post( 'http://localhost:3000/api/v1/users/login', {
+      const response = await axios.post('http://localhost:3000/api/v1/users/login', {
         email,
         password,
       });
 
-      console.log(response.data);
+    
+      console.log('Login successful:', response.data);
+      localStorage.setItem('user',response.data.username);
 
-      
-      // history.push('/home'); 
-
+      navigate("/");
     } catch (error) {
-      console.error('Error logging in:', error.message);
-      // Handle login error - you can display an error message to the user
+     
+      console.error('Error during login:', error.message);
+      setError('Invalid username or password');
     }
   };
 
   return (
     <div>
-      <h2>User Login</h2>
-      <form>
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <br />
-        <button type="button" onClick={handleLogin}>
-          Login
-        </button>
-      </form>
-      <p>
-        Don't have an account?{' '}
-        <Link to="/register">Register here</Link>
-      </p>
+    <Container className="login-container mb-4  align-item-center">
+      <Row className="justify-content-center ">
+        <Col xs={12} md={8} lg={6} className="login-form-container logincontainer">
+          <div className="mb-2 text-align-center">
+            <h3 className="font-light text-3xl text-gray-800 mt-4 mb-4">Login</h3>
+          </div>
+          {error && <Alert variant="danger">{error}</Alert>}
+          <Form>
+            <Form.Group controlId="formUsername">
+              <Form.Label>Your Email</Form.Label>
+              <Form.Control
+                type="email"
+                placeholder="Your Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group controlId="formPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control
+                type="password"
+                placeholder="Your Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </Form.Group>
+            <Button variant="primary" onClick={handleLogin} className="login-button">
+              Login
+            </Button>
+            <div className="mt-3">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+            <div className="mt-3">
+              Don't have an account? <Link to="/register">Register</Link>
+            </div>
+          </Form>
+        </Col>
+      </Row>
+    </Container>
+    
     </div>
   );
 };
 
-export default LoginForm;
+export default Login;

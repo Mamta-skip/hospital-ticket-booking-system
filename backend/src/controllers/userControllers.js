@@ -25,6 +25,7 @@ const registerUser = async (req, res) => {
       
     
     });
+
   if(user.email===process.env.ADMIN_EMAIL){
     user.roles="ADMIN";
   }
@@ -56,10 +57,12 @@ const loginUser = async (req, res) => {
     // Generate JWT token
 
     const token = jwt.sign(
-      { userId: user._id, role: user.role },
+      { userId: user._id, roles: user.roles },
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "1h" }
     );
+    
+    
 
     
     console.log("success");

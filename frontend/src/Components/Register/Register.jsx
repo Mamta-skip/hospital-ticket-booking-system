@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Form, Button, Container } from 'react-bootstrap';
+import { NavLink, useNavigate } from 'react-router-dom';
 
-
-const RegistrationForm = () => {
-  const [username, setUsername] = useState('');
+const Register = () => {
+  const navigate = useNavigate();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  // const history = useHistory();
 
   const handleRegister = async () => {
     try {
@@ -18,62 +18,76 @@ const RegistrationForm = () => {
       }
 
       const response = await axios.post('http://localhost:3000/api/v1/users/register', {
-        username,
+        username: name,
         email,
         password,
         confirmPassword,
-        roles: 'CLIENT',
       });
 
-      console.log(response.data);
-
-      // // Redirect to login page upon successful registration
-      // history.push('/login');
-
+      console.log('Registration successful:', response.data);
+      navigate('/login');
     } catch (error) {
-      console.error('Error registering user:', error.message);
+      if (error.response) {
+        console.error('Server responded with an error:', error.response.data);
+        console.error('Status code:', error.response.status);
+      } else if (error.request) {
+        console.error('No response received from the server');
+      } else {
+        console.error('Error setting up the request:', error.message);
+      }
     }
   };
 
   return (
-    <div>
-      <h2>User Registration</h2>
-    
-      <form>
-        <label>
-          Username:
-          <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Email:
-          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Confirm Password:
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </label>
-        <br />
-        <button type="button" onClick={handleRegister}>
-          Register
-        </button>
-      </form>
-       <p>
-        Already have an account?{' '}
-        <Link to="/login">Go to Login</Link>
-      </p>
-    </div>
+    <Container className="register-container">
+      <div className="register-form-controller">
+        <h3>Register</h3>
+        <Form>
+          <Form.Group controlId="formName">
+            <Form.Label>Your Name</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Your Full Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formEmail">
+            <Form.Label>Your Email</Form.Label>
+            <Form.Control
+              type="email"
+              placeholder="Ex. james@bond.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Your Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group controlId="formConfirmPassword">
+            <Form.Label>Confirm Password</Form.Label>
+            <Form.Control
+              type="password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+            />
+          </Form.Group>
+          <div className="d-flex flex-column align-items-center justify-content-center mt-4">
+            <Button variant="primary" onClick={handleRegister} className="register-button" as={NavLink} to="/login">
+              Register
+            </Button>
+          </div>
+        </Form>
+      </div>
+    </Container>
   );
 };
 
-export default RegistrationForm;
+export default Register;
