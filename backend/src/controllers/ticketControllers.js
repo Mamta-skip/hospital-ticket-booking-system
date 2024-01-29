@@ -10,13 +10,13 @@ const createTicket = async (req, res) => {
 
         const ticket = new Ticket({
             department,
-            doctor,
             name,
             email,
             phone,
             sex,
             age,
             date,
+            bloodgroup,
            
 
     })
