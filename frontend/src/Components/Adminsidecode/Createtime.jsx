@@ -5,6 +5,7 @@ import axios from 'axios';
 const AdminAppointmentForm = () => {
   const [labelText, setLabelText] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
 
   const generateTimeSlots = () => {
     const timeSlots = [];
@@ -24,29 +25,30 @@ const AdminAppointmentForm = () => {
   };
 
   const handleButtonClick = (time) => {
-    console.log('Label Text:', labelText);
-    console.log('Selected Date:', selectedDate);
-    console.log('Selected Time Slot:', time);
+    // Add or remove time slot based on user interaction
+    setSelectedTimeSlots((prevTimeSlots) =>
+      prevTimeSlots.includes(time)
+        ? prevTimeSlots.filter((slot) => slot !== time)
+        : [...prevTimeSlots, time]
+    );
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      // Your server URL
-      const serverUrl = 'http://localhost:3000/api/v1/admins/appointments'; // Replace with your actual server URL
-
-      // Send data to the server
+      const serverUrl = 'http://localhost:3000/api/v1/admins/appointments';
       await axios.post(serverUrl, {
         labelText,
         selectedDate,
+        selectedTimeSlots,
       });
 
       console.log('Data sent successfully');
 
-      // Reset form fields
       setLabelText('');
       setSelectedDate('');
+      setSelectedTimeSlots([]);
     } catch (error) {
       console.error('Error sending data:', error.message);
     }
@@ -75,12 +77,12 @@ const AdminAppointmentForm = () => {
           </Form.Group>
 
           <Form.Group controlId="formTimeSlots">
-            <Form.Label>Select Time Slot:</Form.Label>
+            <Form.Label>Select Time Slots:</Form.Label>
             <Row className="mb-3">
               {generateTimeSlots().map((time, index) => (
                 <Col key={index} xs={3} className="mb-2">
                   <Button
-                    variant="secondary"
+                    variant={selectedTimeSlots.includes(time) ? 'primary' : 'secondary'}
                     onClick={() => handleButtonClick(time)}
                     block
                   >

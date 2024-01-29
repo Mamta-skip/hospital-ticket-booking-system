@@ -1,36 +1,24 @@
-
-
+// createAppointment controller
 import Timeslot from '../models/timeslot.js';
 
-// Controller to create a new appointment
 const createAppointment = async (req, res) => {
   try {
-    const { labelText, selectedDate } = req.body;
-    const interval = 20; // Interval in minutes
-    const startTime = new Date(`2000-01-01 09:00`);
-    const endTime = new Date(`2000-01-01 16:00`);
+    const { labelText, selectedDate, selectedTimeSlots } = req.body;
 
-    const timeSlots = [];
-    let current = startTime;
-
-    while (current <= endTime) {
-      timeSlots.push(current.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
-      current = new Date(current.getTime() + interval * 60000);
-    }
-
-    // Create a new appointment with populated time slots
+    // Create a new appointment with selected time slots
     const appointment = new Timeslot({
       labelText,
-      selectedDate,
-      timeSlots,
+      selectedDate, // Assuming selectedDate is in the format 'YYYY-MM-DD'
+      timeSlots: selectedTimeSlots,
     });
 
     // Save the appointment to the database
     await appointment.save();
 
+    console.log('Appointment saved successfully');
     res.status(201).json({ message: 'Appointment created successfully' });
   } catch (error) {
-    console.error(error);
+    console.error('Error creating appointment:', error);
     res.status(500).json({ error: 'Internal server error' });
   }
 };

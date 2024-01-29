@@ -12,10 +12,11 @@ import userRoutes from './routes/userRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
 
 import  timesedulingRoutes from './routes/timesedulingroute.js';
+import availabletimeslotRoutes from './routes/availabletimeslotroute.js';
 
 
 
-import adminRoutes from './routes/adminRoutes.js';
+
 
 app.use(express.json({ limit: "16kb" }));
 app.use(express.urlencoded({ extended: true }));
@@ -39,6 +40,7 @@ database();
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/tickets", ticketRoutes);
 app.use("/api/v1/admins", timesedulingRoutes); 
+app.use("/api/v1/clients",availabletimeslotRoutes );
 
 const PORT = process.env.PORT || 3000;
 
