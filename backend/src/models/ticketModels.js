@@ -6,10 +6,6 @@ const ticketSchema = mongoose.Schema(
             type:String,
             required:true
         },
-        doctor:{
-            type:String,
-            required:true
-        },
         name:{
             type:String,
             required:true
@@ -35,6 +31,10 @@ const ticketSchema = mongoose.Schema(
             type:Date,
             required:true
         },
+        bloodgroup:{
+            type:String,
+            required:false
+        }
        
         },
     
