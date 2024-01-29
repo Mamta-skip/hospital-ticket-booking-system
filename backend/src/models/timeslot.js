@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const timeslotSchema = mongoose.Schema(
   {
@@ -10,13 +10,15 @@ const timeslotSchema = mongoose.Schema(
       type: Date,
       required: true,
     },
-    timeSlots: {
-      type: [String],
-      required: true,
-    }
+    timeSlots: [
+      {
+        type: String, // Corrected the type to String
+        required: true,
+      },
+    ],
   },
-  { timestamps: true } // Move timestamps outside the object
+  { timestamps: true }
 );
 
-const Timeslot = mongoose.model("Timeslot", timeslotSchema);
+const Timeslot = mongoose.model('Timeslot', timeslotSchema);
 export default Timeslot;

@@ -1,107 +1,83 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Row, Col, Form, Button, Modal } from 'react-bootstrap';
 import axios from 'axios';
+import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 
-const ClientBooking = () => {
-  const [appointments, setAppointments] = useState([]);
-  const [selectedSlot, setSelectedSlot] = useState('');
-  const [selectedSlotDetails, setSelectedSlotDetails] = useState(null);
-  const [showForm, setShowForm] = useState(false);
+const Book = () => {
+  const [selectedDate, setSelectedDate] = useState('');
+  const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const fetchAvailableTimeSlots = async () => {
+    try {
+      setLoading(true);
+      setError('');
+  
+      // Additional input validation for the date
+      const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+      if (!selectedDate || !dateRegex.test(selectedDate)) {
+        return setError('Please select a valid date in YYYY-MM-DD format.');
+      }
+  
+      // Clear previous data when a new date is selected
+      setAvailableTimeSlots([]);
+      
+      const serverUrl = `http://localhost:3000/api/v1/clients/book/${selectedDate}`;
+      const response = await axios.get(serverUrl);
+  
+      const { timeSlots } = response.data;
+  
+      // Show alert if there are no available time slots
+      if (timeSlots.length === 0) {
+        alert('No available time slots for the selected date.');
+      }
+  
+      setAvailableTimeSlots(timeSlots);
+    } catch (error) {
+      alert('Error No available time slots for the selected date,Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  
 
   useEffect(() => {
-    // Fetch appointments from the backend
-    const fetchAppointments = async () => {
-      try {
-        const response = await axios.get('http://localhost:3000/api/v1/admins/appointments');
-        setAppointments(response.data);
-      } catch (error) {
-        console.error('Error fetching appointments:', error);
-      }
-    };
-
-    fetchAppointments();
-  }, []);
-
-  const handleBookSlot = (slotDetails) => {
-    setSelectedSlotDetails(slotDetails);
-    setShowForm(true);
-  };
-
-  const handleCloseForm = () => {
-    setShowForm(false);
-  };
-
-  const handleInputChange = (e) => {
-    const { id, value } = e.target;
-    setSelectedSlotDetails((prevDetails) => ({
-      ...prevDetails,
-      [id]: value,
-    }));
-  };
-
-  const handleSubmitForm = async () => {
-    try {
-      await axios.post('http://localhost:3000/api/v1/tickets', {
-        department: selectedSlotDetails.department,
-        doctor: selectedSlotDetails.doctor,
-        name: selectedSlotDetails.name,
-        email: selectedSlotDetails.email,
-        phone: selectedSlotDetails.phone,
-        sex: selectedSlotDetails.sex,
-        age: selectedSlotDetails.age,
-        date: selectedSlotDetails.date,
-        time: `${selectedSlotDetails.startTime} - ${selectedSlotDetails.endTime}`,
-      });
-
-      console.log('Booking submitted successfully');
-    } catch (error) {
-      console.error('Error submitting booking:', error);
+    if (selectedDate) {
+      fetchAvailableTimeSlots();
     }
-
-    setShowForm(false);
-    setSelectedSlot('');
-    setSelectedSlotDetails(null);
-  };
+  }, [selectedDate]);
 
   return (
-    <Container className="mt-4">
-      <h2>Book a Slot</h2>
-      <Row>
-        <Col md={6}>
-          <Form.Group controlId="formSelectSlot">
-            <Form.Label>Select a Time Slot</Form.Label>
-            <Form.Control as="select" value={selectedSlot} onChange={(e) => setSelectedSlot(e.target.value)}>
-              <option value="" disabled>Select a slot...</option>
-              {appointments.map((appointment) => (
-                <option key={appointment._id} value={appointment._id} onClick={() => handleBookSlot(appointment)}>
-                  {`${appointment.labelText} - ${appointment.selectedDate} - ${appointment.timeSlots.join(', ')}`}
-                </option>
-              ))}
-            </Form.Control>
-          </Form.Group>
-        </Col>
-      </Row>
-      <Row>
-        <Col md={6}>
-          <Button variant="primary" onClick={() => handleBookSlot(selectedSlotDetails)}>
-            Book Slot
-          </Button>
-        </Col>
-      </Row>
+    <Container>
+      <h3 className="mt-4">Choose Appointment Time</h3>
+      <Form>
+        <Form.Group controlId="formDate" className="mb-3">
+          <Form.Label>Select Date:</Form.Label>
+          <Form.Control
+            type="date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+          />
+        </Form.Group>
 
-      {/* Form Modal */}
-      <Modal show={showForm} onHide={handleCloseForm}>
-        <Modal.Header closeButton>
-          <Modal.Title>Booking Form</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={(e) => { e.preventDefault(); handleSubmitForm(); }}>
-            {/* ... (unchanged form fields) */}
-          </Form>
-        </Modal.Body>
-      </Modal>
+        <Form.Group controlId="formTimeSlots">
+          <Form.Label>Available Time Slots:</Form.Label>
+          {loading && <p>Loading...</p>}
+          {error && <p style={{ color: 'red' }}>{error}</p>}
+          <Row className="mb-3">
+            {availableTimeSlots.map((time, index) => (
+              <Col key={index} xs={3} className="mb-2">
+                <Button variant="secondary" block disabled={loading}>
+                  {time}
+                </Button>
+              </Col>
+            ))}
+          </Row>
+        </Form.Group>
+      </Form>
     </Container>
   );
 };
 
-export default ClientBooking;
+export default Book;
