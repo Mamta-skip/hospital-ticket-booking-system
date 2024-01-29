@@ -1,46 +1,56 @@
+// 
+
+
+
+
+// Book.jsx
+// Book.jsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+import { Container, Form, Button, Row, Col, Modal } from 'react-bootstrap';
+import BookingForm from './Bookingform';
 
 const Book = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [availableTimeSlots, setAvailableTimeSlots] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [showBookingForm, setShowBookingForm] = useState(false);
 
   const fetchAvailableTimeSlots = async () => {
     try {
       setLoading(true);
       setError('');
-  
-      // Additional input validation for the date
+
       const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
       if (!selectedDate || !dateRegex.test(selectedDate)) {
         return setError('Please select a valid date in YYYY-MM-DD format.');
       }
-  
-      // Clear previous data when a new date is selected
+
       setAvailableTimeSlots([]);
-      
+
       const serverUrl = `http://localhost:3000/api/v1/clients/book/${selectedDate}`;
       const response = await axios.get(serverUrl);
-  
+
       const { timeSlots } = response.data;
-  
-      // Show alert if there are no available time slots
+
       if (timeSlots.length === 0) {
         alert('No available time slots for the selected date.');
       }
-  
+
       setAvailableTimeSlots(timeSlots);
     } catch (error) {
-      alert('Error No available time slots for the selected date,Please try again.');
+      alert('Error fetching available time slots. Please try again.');
     } finally {
       setLoading(false);
     }
   };
-  
-  
+
+  const handleTimeSlotSelection = (selectedTime) => {
+    setSelectedTimeSlot(selectedTime);
+    setShowBookingForm(true);
+  };
 
   useEffect(() => {
     if (selectedDate) {
@@ -68,7 +78,12 @@ const Book = () => {
           <Row className="mb-3">
             {availableTimeSlots.map((time, index) => (
               <Col key={index} xs={3} className="mb-2">
-                <Button variant="secondary" block disabled={loading}>
+                <Button
+                  variant="secondary"
+                  block
+                  disabled={loading}
+                  onClick={() => handleTimeSlotSelection(time)}
+                >
                   {time}
                 </Button>
               </Col>
@@ -76,6 +91,20 @@ const Book = () => {
           </Row>
         </Form.Group>
       </Form>
+
+      {/* Render the BookingForm component as a Modal */}
+      <Modal show={showBookingForm} onHide={() => setShowBookingForm(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Booking Form</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <BookingForm
+            selectedDate={selectedDate}
+            selectedTimeSlot={selectedTimeSlot}
+            onClose={() => setShowBookingForm(false)}
+          />
+        </Modal.Body>
+      </Modal>
     </Container>
   );
 };

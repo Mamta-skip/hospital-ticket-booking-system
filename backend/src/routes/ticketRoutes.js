@@ -1,9 +1,10 @@
-import  {createTicket} from '../controllers/ticketControllers.js'
+// ticketRoutes.js
 import express from 'express';
+import bookAppointment from '../controllers/ticketControllers.js';
+
 const router = express.Router();
-import authMiddleware from '../middlewares/authMiddleware.js'
-router.post("/create",createTicket);
 
-
+// Handle POST requests to create a new ticket
+router.post('/', bookAppointment);
 
 export default router;
