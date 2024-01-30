@@ -27,6 +27,9 @@ function Navbars() {
             <NavLink className="nav-link " to="/register" style={{color:'#84cc16', fontWeight:'bold'}}>
               Signup
             </NavLink>
+            <NavLink className="nav-link " to="/logout" style={{color:'#84cc16', fontWeight:'bold'}}>
+              logout
+            </NavLink>
           </Nav>
         </Navbar.Collapse>
       </Container>

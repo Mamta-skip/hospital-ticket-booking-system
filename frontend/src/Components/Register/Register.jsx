@@ -80,7 +80,7 @@ const Register = () => {
             />
           </Form.Group>
           <div className="d-flex flex-column align-items-center justify-content-center mt-4">
-            <Button variant="primary" onClick={handleRegister} className="register-button" as={NavLink} to="/login">
+            <Button variant="primary" onClick={handleRegister} className="register-button" >
               Register
             </Button>
           </div>
