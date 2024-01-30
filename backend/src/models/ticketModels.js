@@ -1,44 +1,47 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
 const ticketSchema = mongoose.Schema(
-    {
-        department:{
-            type:String,
-            required:true
-        },
-        name:{
-            type:String,
-            required:true
-        },
-        email:{
-            type:String,
-            required:[true, "plesae enter your email"],
-            unique:true
-        },
-        phone:{
-            type:Number,
-            required:true
-        },
-        sex:{
-            type:String,
-            required:true
-        },
-        age:{
-            type:Number,
-            required:true
-        },
-        date:{
-            type:Date,
-            required:true
-        },
-        bloodgroup:{
-            type:String,
-            required:false
-        }
-       
-        },
-    
-    {timestamps:true});
+  {
+    department: {
+      type: String,
+      required: true,
+    },
+    name: {
+      type: String,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: [true, 'Please enter your email'],
+      unique: true,
+    },
+    phone: {
+      type: String, // Assuming the phone number can be a string
+      required: true,
+    },
+    sex: {
+      type: String,
+      required: true,
+    },
+    age: {
+      type: String, // or Number, based on your preference
+      required: true,
+    },
+    date: {
+      type: Date, // Adjust the type based on the format you want to store
+      required: true,
+    },
+    timeSlot: {
+      type: String, // or another appropriate type
+      required: true,
+    },
+    bloodgroup: {
+      type: String,
+      required: false,
+    },
+  },
+  { timestamps: true }
+);
 
-const Ticket = mongoose.model("Ticket",ticketSchema);
+const Ticket = mongoose.model('Ticket', ticketSchema);
 export default Ticket;
