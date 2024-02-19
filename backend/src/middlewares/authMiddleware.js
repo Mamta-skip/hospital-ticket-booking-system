@@ -1,21 +1,25 @@
-
 import jwt from 'jsonwebtoken';
 
+const authMiddleware = (req, res, next) => {
+    const authHeader = req.headers.authorization;
 
-const authMiddleware = async (req, res, next) => {
-    const auhHeader = req.headers.authorization;
-    console.log(auhHeader);
-    const token = auhHeader && auhHeader.split(' ')[1];
-    console.log(token);
-
-    if (!token) {
+    if (!authHeader) {
         return res.status(401).json({ error: 'Token not found' });
     }
-    console.log("auth");
 
-    const decoded = jwt.verify(token,process.env.ACCESS_TOKEN_SECRET);
-    req.user = decoded;
-    next()
-}
+    const token = authHeader.split(' ')[1];
+
+    if (!token) {
+        return res.status(401).json({ error: 'Invalid token format' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+        req.user = decoded;
+        next();
+    } catch (error) {
+        return res.status(401).json({ error: 'Invalid or expired token' });
+    }
+};
 
 export default authMiddleware;

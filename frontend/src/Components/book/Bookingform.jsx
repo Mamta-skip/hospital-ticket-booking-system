@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
 
-const BookingForm = ({ selectedDate, selectedTimeSlot, onClose }) => {
+const BookingForm = ({ selectedDate, selectedTimeSlot, onClose, onFormSubmit }) => {
   const [formData, setFormData] = useState({
     department: '',
     name: '',
@@ -15,26 +15,33 @@ const BookingForm = ({ selectedDate, selectedTimeSlot, onClose }) => {
     timeSlot: selectedTimeSlot,
     bloodgroup: '',
   });
+  const [isSubmitting, setIsSubmitting] = useState(false); // New state for form submission status
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true); // Set form submission status to true
+
     try {
-      console.log('Submitting form data:', formData); // Add this line for debugging
-  
+      console.log('Submitting form data:', formData);
+
       // Make a request to save the form data
       const response = await axios.post('http://localhost:3000/api/v1/tickets', formData);
       console.log('Booking successful:', response.data);
-  
+
       // Additional logic if needed, such as showing a success message
-  
+
+      // Trigger the onFormSubmit callback with the form data
+      onFormSubmit(formData);
+
       // Close the form
       onClose();
     } catch (error) {
       console.error('Error booking:', error.message);
       // Handle error, show an error message, etc.
+    } finally {
+      setIsSubmitting(false); // Set form submission status back to false
     }
   };
-  
 
   const handleChange = (e) => {
     setFormData({
@@ -58,6 +65,7 @@ const BookingForm = ({ selectedDate, selectedTimeSlot, onClose }) => {
           </Col>
         </Row>
 
+      
         <Form.Group controlId="formDepartment" className="mb-3">
           <Form.Label>Department:</Form.Label>
           <Form.Control type="text" name="department" value={formData.department} onChange={handleChange} required />
@@ -97,8 +105,8 @@ const BookingForm = ({ selectedDate, selectedTimeSlot, onClose }) => {
           <Form.Control type="text" name="bloodgroup" value={formData.bloodgroup} onChange={handleChange} />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Book Now
+        <Button variant="primary" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Submitting...' : 'Book Now'}
         </Button>
         <Button variant="secondary" className="ms-2" onClick={onClose}>
           Cancel

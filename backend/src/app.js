@@ -14,7 +14,7 @@ import ticketRoutes from './routes/ticketRoutes.js';
 import  timesedulingRoutes from './routes/timesedulingroute.js';
 import availabletimeslotRoutes from './routes/availabletimeslotroute.js';
 
-
+import getBookedTimeSlots from './routes/getbookedtimeslot.js';
 
 
 
@@ -41,6 +41,7 @@ app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/tickets", ticketRoutes);
 app.use("/api/v1/admins", timesedulingRoutes); 
 app.use("/api/v1/clients",availabletimeslotRoutes );
+app.use("/api/v1/clients",getBookedTimeSlots);
 
 const PORT = process.env.PORT || 3000;
 

@@ -22,6 +22,7 @@ const userSchema = mongoose.Schema(
             enum:['ADMIN','CLIENT'],
             default:'CLIENT'
         },
+       
         
     },
         
