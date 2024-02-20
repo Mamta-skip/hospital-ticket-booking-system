@@ -119,6 +119,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Container, Form, Button, Row, Col, Modal } from 'react-bootstrap';
 import BookingForm from './Bookingform';
+import './book.css';
 
 const Book = () => {
   const [selectedDate, setSelectedDate] = useState('');
@@ -221,6 +222,7 @@ const Book = () => {
   }, [selectedDate]);
 
   return (
+    <div className="bookcomponent">
     <Container>
       <h3 className="mt-4">Choose Appointment Time</h3>
       <Form>
@@ -269,6 +271,7 @@ const Book = () => {
         </Modal.Body>
       </Modal>
     </Container>
+    </div>
   );
 };
 

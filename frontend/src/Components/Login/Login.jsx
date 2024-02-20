@@ -3,7 +3,7 @@
 // import { Link } from 'react-router-dom';
 // import axios from 'axios';
 // import { useNavigate } from 'react-router-dom';
-// import './Login.css';
+// 
 
 // const Login = () => {
 //   const [email, setEmail] = useState('');
@@ -86,29 +86,39 @@
 
 // Login.js
 import React, { useState } from 'react';
-import { Form, Button, Container, Row, Col, Alert } from 'react-bootstrap';
+import { Form, Button, Container, Row, Col, Alert} from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../AuthContext'; // Update the path
-
+import './Login.css';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { login, error } = useAuth();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    login(email, password);
+  const handleLogin = async () => {
+    await login(email, password);
+  
+  
+    if (!error) {
+      alert('Login Sucessful');
+      navigate('/');
+    }
   };
+  
+
 
   return (
-    <div>
-      <Container className="login-container mb-4  align-item-center">
+    <div className='loginform'>
+      <Container className="login-container ">
         <Row className="justify-content-center ">
           <Col xs={12} md={8} lg={6} className="login-form-container logincontainer">
             <div className="mb-2 text-align-center">
               <h3 className="font-light text-3xl text-gray-800 mt-4 mb-4">Login</h3>
             </div>
             {error && <Alert variant="danger">{error}</Alert>}
-            <Form>
+            <Form className='formcontainer'>
               <Form.Group controlId="formUsername">
                 <Form.Label>Your Email</Form.Label>
                 <Form.Control
@@ -127,12 +137,12 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Group>
-              <Button variant="primary" onClick={handleLogin} className="login-button">
-                Login
-              </Button>
-              <div className="mt-3">
-                <Link to="/forgot-password">Forgot Password?</Link>
-              </div>
+              <Button 
+                variant="success" 
+                onClick={handleLogin} 
+                className="login-button"
+                style={{ backgroundColor: 'rgb(52 145 34)' }} 
+              > LOGIN</Button>
               <div className="mt-3">
                 Don't have an account? <Link to="/register">Register</Link>
               </div>
