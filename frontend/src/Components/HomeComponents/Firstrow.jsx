@@ -1,11 +1,25 @@
 import React from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import { Col, Container, NavLink, Row } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import row1image from '../images/row1.jpg';
 import Image from 'react-bootstrap/Image';
+import { useAuth } from '../AuthContext';
 
 function Firstrow() {
+  const navigate = useNavigate();
+
+  const { isAuthenticated } = useAuth();
+  const Bookticketbutton = ()=>{
+    if(isAuthenticated){
+      navigate('/book');
+    }
+    else{
+      alert('Please log in to book a ticket');
+      navigate('/login');
+    }
+  }
   return (
     <div>
       <Container className='mt-5 align-item-center justify-content-center' style={{ height: '400px' }}>
@@ -21,7 +35,7 @@ function Firstrow() {
                   bulk of the card's content text to build on the card title and make up the
                   bulk of the card's content.
                 </Card.Text>
-                <Button style={{ fontSize: '1.5rem',color:'#fff',background:'#349122', border:'none', padding: '12px 15px', marginTop: '1rem' }}>
+                <Button onClick={Bookticketbutton} style={{ fontSize: '1.5rem',color:'#fff',background:'#349122', border:'none', padding: '12px 15px', marginTop: '1rem' }}>
                   Book Ticket
                 </Button>{' '}
               </Card.Body>
