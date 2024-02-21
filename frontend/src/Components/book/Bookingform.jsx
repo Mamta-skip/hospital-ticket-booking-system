@@ -2,8 +2,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Form, Button, Container, Row, Col } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 const BookingForm = ({ selectedDate, selectedTimeSlot, onClose, onFormSubmit }) => {
+  
   const [formData, setFormData] = useState({
     department: '',
     name: '',
@@ -17,31 +19,72 @@ const BookingForm = ({ selectedDate, selectedTimeSlot, onClose, onFormSubmit }) 
   });
   const [isSubmitting, setIsSubmitting] = useState(false); // New state for form submission status
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true); // Set form submission status to true
+  const handleSubmit1 = async (e) => {
+  const navigate = useNavigate();
+  e.preventDefault();
+  setIsSubmitting(true);
 
-    try {
-      console.log('Submitting form data:', formData);
 
-      // Make a request to save the form data
-      const response = await axios.post('http://localhost:3000/api/v1/tickets', formData);
-      console.log('Booking successful:', response.data);
+  try {
+    const Token = localStorage.getItem('token');
+    console.log(Token);
+    // if (!token) {
+    //   alert('Please log in');
+    //   navigate('/login');
+    // }
 
-      // Additional logic if needed, such as showing a success message
+    const response = await axios.post(
+      'http://localhost:3000/api/v1/tickets',
+      formData,
+      {
+        headers: {
+          "Authorization": "Bearer " + Token
+        }
+      }
+    );
 
-      // Trigger the onFormSubmit callback with the form data
-      onFormSubmit(formData);
+    console.log('Booking successful:', response.data);
 
-      // Close the form
-      onClose();
-    } catch (error) {
-      console.error('Error booking:', error.message);
-      // Handle error, show an error message, etc.
-    } finally {
-      setIsSubmitting(false); // Set form submission status back to false
+    // onFormSubmit(formData);
+    // onClose();
+  } catch (error) {
+    console.error('Error booking:', error.message);
+    // Handle error, show an error message, etc.
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+const handleSubmit= async(e)=>{
+  e.preventDefault();
+  setIsSubmitting(true);
+  try {
+    const token = localStorage.getItem('token')||null;
+    if (!token){
+      console.log("token is not in local ");
     }
-  };
+    else{
+      const response = await axios.post(
+        'http://localhost:3000/api/v1/tickets',
+        formData,
+        {
+          headers: {
+            "Authorization": "Bearer " + token
+          }
+        }
+      );
+      console.log(response);
+    }
+    onFormSubmit(formData);
+    onClose();
+  } catch (error) {
+    console.log(error);
+    
+  }
+  finally{
+    setIsSubmitting(false);
+  }
+}
+
 
   const handleChange = (e) => {
     setFormData({
@@ -108,7 +151,7 @@ const BookingForm = ({ selectedDate, selectedTimeSlot, onClose, onFormSubmit }) 
         <Button variant="primary" type="submit" disabled={isSubmitting}>
           {isSubmitting ? 'Submitting...' : 'Book Now'}
         </Button>
-        <Button variant="secondary" className="ms-2" onClick={onClose}>
+        <Button variant="secondary" className="ms-2" >
           Cancel
         </Button>
       </Form>

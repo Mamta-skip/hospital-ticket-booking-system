@@ -6,8 +6,10 @@ import dotenv from 'dotenv';
 dotenv.config({ path: "./.env" });
 
 const app = express()
-
+import isAdmin from './middlewares/adminMiddleware.js';
+import authMiddleware from './middlewares/authMiddleware.js';
 // Importing the routes
+
 import userRoutes from './routes/userRoutes.js';
 import ticketRoutes from './routes/ticketRoutes.js';
 
@@ -39,7 +41,7 @@ database();
 // Using the routes
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/tickets", ticketRoutes);
-app.use("/api/v1/admins", timesedulingRoutes); 
+app.use("/api/v1/admins", authMiddleware, isAdmin, timesedulingRoutes); 
 app.use("/api/v1/clients",availabletimeslotRoutes );
 app.use("/api/v1/clients",getBookedTimeSlots);
 

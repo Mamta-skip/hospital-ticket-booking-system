@@ -18,3 +18,7 @@ export const userIsAdmin = () => {
   const decodedToken = decodeToken();
   return decodedToken?.roles?.includes('ADMIN');
 };
+export const userIsClient = () => {
+  const decodedToken = decodeToken();
+  return decodedToken?.roles?.includes('CLIENT');
+};

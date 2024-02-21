@@ -40,12 +40,14 @@ import Register from './Components/Register/Register';
 import Login from './Components/Login/Login';
 import AdminAppointmentForm from './Components/Adminsidecode/Createtime';
 import UserAppointmentForm from './Components/book/Book';
-import AdminRoute from './AdminRoute';
+import {AdminRoute} from './AdminRoute';
+import { UserRoute } from './AdminRoute';
 import { AuthProvider } from './Components/AuthContext';
+import UserDashboard from './Components/UserProfile/UserProfile';
+
 
 
 const App = () => {
-
   return (
     <AuthProvider>
       <Router>
@@ -54,12 +56,14 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
+         {/* <Route path="/dashboard" element={<UserDashboard />}/>} /> */}
           <Route
             path="/create"
             element={<AdminRoute element={<AdminAppointmentForm />} />}
           />
          
-          <Route path="/book" element={<UserAppointmentForm />} />
+          <Route path="/book" element={<UserRoute element={<UserAppointmentForm />} />}
+          />
         </Routes>
       </Router>
     </AuthProvider>

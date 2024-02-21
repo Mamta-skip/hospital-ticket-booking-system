@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+// UserDashboard.js
+import React from 'react';
+import { useAuth } from '../AuthContext'; // Update the path
 
-function UserProfile() {
-    const [name ,setName]= useState()
-    const[gmail, setGmail]=usestate()
-    
+const UserDashboard = () => {
+  const { user } = useAuth(); // Access user information using the useAuth hook
+
   return (
     <div>
-      <h1>Your Profile</h1>
-
+      <h2>User Dashboard</h2>
+      {user ? (
+        <>
+          <p>Email: {user.email}</p>
+          <p>Username: {user.username}</p>
+          
+        </>
+      ) : (
+        <p>User information not available</p>
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default UserProfile
+export default UserDashboard;

@@ -1,15 +1,16 @@
 // AuthContext.js
 import { createContext, useContext, useState } from 'react';
-import {userIsAdmin} from '../authutils';
+import { decodeToken, userIsAdmin, userIsClient } from '../authutils';
+
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [error, setError] = useState(null);
+  const [user, setUser] = useState(null);
 
   const login = async (email, password) => {
     try {
-      // Call your login API here, assuming it returns a token on success
       const response = await fetch('http://localhost:3000/api/v1/users/login', {
         method: 'POST',
         headers: {
@@ -30,6 +31,13 @@ export const AuthProvider = ({ children }) => {
       // Store the token
       localStorage.setItem('token', token);
 
+      // Decode the token to get user information
+      const decodedUser = decodeToken(token);
+
+      // Set user state with decoded user information
+      setUser(decodedUser);
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(decodedUser));
       // Clear any previous errors
       setError(null);
 
@@ -47,10 +55,11 @@ export const AuthProvider = ({ children }) => {
     setIsAuthenticated(false);
     // Additional actions, e.g., removing token from local storage
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout, error, userIsAdmin }}>
+    <AuthContext.Provider value={{ isAuthenticated, login, logout, error, user, userIsAdmin, userIsClient }}>
       {children}
     </AuthContext.Provider>
   );

@@ -44,9 +44,14 @@ function Navbars() {
                 </NavLink>
               </>
             ) : (
+              <>
+              <NavLink className="nav-link" to="/dashboard" style={{ color: '#84cc16', fontWeight: 'bold' }}>
+              Userprofile
+            </NavLink>
               <button className="nav-link" onClick={logout} style={{ color: '#84cc16', fontWeight: 'bold', background: 'none', border: 'none', cursor: 'pointer' }}>
                 Logout
               </button>
+              </>
             )}
           </Nav>
         </Navbar.Collapse>
